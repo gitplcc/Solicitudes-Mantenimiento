@@ -1,0 +1,90 @@
+{%- block form_row -%}
+<div class="control-group form-group">
+  <div class="controls">
+    {{- form_label(form) -}}
+    {{- form_errors(form) -}}
+    {{- form_widget(form) -}}
+  </div>
+</div>
+{%- endblock form_row -%}
+
+{%- block form_widget_simple -%}
+{%- set type = type|default('text') -%}
+<input type="{{ type }}" class="form-control" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} />
+{%- if type== 'file' -%}
+<img id="tapaThumb" class="img-fluid" width="150px" src="" alt="">
+{%- endif -%}
+{%- endblock form_widget_simple -%}
+
+{%- block textarea_widget -%}
+<textarea class="form-control" {{ block('widget_attributes') }}>{{ value }}</textarea>
+{%- endblock textarea_widget -%}
+
+<h6>{%- block choice_widget -%}</h6>
+    {% if expanded %}
+        {{- block('choice_widget_expanded') -}}
+    {% else %}
+        {{- block('choice_widget_collapsed') -}}
+    {% endif %}
+{%- endblock choice_widget -%}
+
+{%- block choice_widget_expanded -%}
+    <div {{ block('widget_container_attributes') }}>
+    {%- for child in form %}
+        {{- form_widget(child) -}}
+        {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+    {% endfor -%}
+    </div>
+{%- endblock choice_widget_expanded -%}
+
+{%- block choice_widget_collapsed -%}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+        {% set required = false %}
+    {%- endif -%}
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {%- if placeholder is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>
+        {%- endif -%}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {{- block('choice_widget_options') -}}
+            {%- if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+        {%- endif -%}
+        {%- set options = choices -%}
+        {{- block('choice_widget_options') -}}
+    </select>
+{%- endblock choice_widget_collapsed -%}
+
+{%- block choice_widget_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <optgroup label="{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}">
+                {% set options = choice %}
+                {{- block('choice_widget_options') -}}
+            </optgroup>
+        {%- else -%}
+            <option value="{{ choice.value }}"{% if choice.attr %}{% with { attr: choice.attr } %}{{ block('attributes') }}{% endwith %}{% endif %}{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans({}, choice_translation_domain) }}</option>
+        {%- endif -%}
+    {% endfor %}
+{%- endblock choice_widget_options -%}
+
+
+
+{%- block button_widget -%}
+{%- if label is empty -%}
+{%- if label_format is not empty -%}
+{% set label = label_format|replace({
+        '%name%': name,
+        '%id%': id,
+        }) %}
+{%- elseif label is same as(false) -%}
+{% set translation_domain = false %}
+{%- else -%}
+{% set label = name|humanize %}
+{%- endif -%}
+{%- endif -%}
+<button style="background-color:#C3C3C3;border: #000;background: -moz-linear-gradient(center top , #C0C0C0 0%, #808080 100%) repeat scroll 0 0 transparent;background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #C0C0C0), color-stop(100%,#808080));
+  box-shadow: 1px 1px 1px grey" type="{{ type|default('button') }}" class="btn btn-primary" {{ block('button_attributes') }}>Aceptar</button>
+{%- endblock button_widget -%}

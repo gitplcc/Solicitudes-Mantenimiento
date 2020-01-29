@@ -1,0 +1,51 @@
+{# Plantilla de nuestra aplicación#}
+{%extends 'frontal/base1.html.twig'%}
+{#TITULO#}
+{% block titulo %}login{% endblock %}
+{#Contenido#}
+{% block contenido %}
+<!-- Page Content -->
+<div class="container">
+  <div style="margin-top:75px">
+
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Mantenimiento
+      <small>Login de usuario</small>
+    </h1>
+  </div>
+
+
+  <!-- Intro Content -->
+  <div style="margin-bottom:75px">
+
+    <div class="row">
+      <div class="col-lg-6">
+        {%if error%}
+        <h3>{{error.messageKey|trans(error.messageData, 'security')}}</h3>
+        {%endif%}
+        <form action="{{ path('login') }}" method="post">
+          <div class="control-group form-group">
+            <div class="controls">
+              <label for="username">Username:</label>
+              <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" />
+            </div>
+          </div>
+          <div class=" control-group form-group">
+            <div class="controls">
+              <label for="password">Password:</label>
+              <input class="form-control" type="password" id="password" name="_password" />
+            </div>
+          </div>
+
+          <button class="btn btn-primary" type="submit">login</button>
+        </form>
+      </div>
+      <div class="col-lg-6">
+
+      </div>
+    </div>
+    <!-- /.row -->
+  </div>
+</div>
+
+{% endblock %}

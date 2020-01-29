@@ -1,0 +1,81 @@
+{% extends 'frontal/base1.html.twig' %}
+{% block titulo %}Solicitudes{% endblock %}
+{% block contenido %}
+<div class="container">
+  <div style="margin-top:50px">
+    <h1 class=" mt-4 mb-3">Solicitudes</<h1>
+  </div>
+
+  <div class="row">
+
+
+    <div class="col-md-12">
+
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+
+            <th scope="col">
+              <h6>Referencia</h6>
+            </th>
+            <th scope="col">
+              <h6>Fecha</h6>
+            </th>
+            <th scope="col">
+              <h6>Estancia</h6>
+            </th>
+            <th scope="col">
+              <h6>Solicitante</h6>
+            </th>
+            <th scope="col">
+              <h6>Generar Parte</h6>
+            </th>
+
+          </tr>
+        </thead>
+        <tbody>
+          {% for solicitud in solicitudes %}
+          <tr>
+
+            <td>
+              <h5><a href="{{path('solicitud',{'id':solicitud.id})}}">{{solicitud.id}}
+                </a></h5>
+
+            </td>
+            <td>
+              <h6>{{solicitud.fecha|date('Y/m/d')}}</h6>
+            </td>
+
+            <td>
+              <h6>
+                {{solicitud.estancia}}
+              </h6>
+            </td>
+            <td>
+              <h6>{{solicitud.solicitante}}</h6>
+            </td>
+
+            <th scope="row">
+              {% if solicitud.pendiente %}
+              <h5><a href="{{path('nuevoParte',{'id':solicitud.id})}}">Parte
+                </a></h5>
+              {% else %}
+              <h5><a href="">
+                </a></h5>
+              {% endif %}
+
+
+            </th>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-2">
+    </div>
+  </div>
+</div>
+<div style="margin-bottom:200px">
+</div>
+</div>
+{% endblock %}

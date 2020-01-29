@@ -1,0 +1,102 @@
+{% extends 'frontal/base1.html.twig' %}
+{% block titulo %}Partes de Trabajo{% endblock %}
+{% block contenido %}
+<div id="imagen">
+  <div id="content">
+    <div class="container">
+      <div style="margin-top:50px">
+        <h1 class=" mt-4 mb-3">Partes de Trabajo</<h1>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+
+
+          <table class="table">
+            <thead class="thead-dark">
+              <small>
+                <tr>
+                  <th scope="col">
+                    <h6>Editar</h6>
+                  </th>
+
+                  <th scope="col">
+                    <h6>Referencia</h6>
+                  </th>
+                  <th scope="col">
+                    <h6>localización</h6>
+                  </th>
+
+                  <th scope="col">
+                    <h6>Trabajador</h6>
+                  </th>
+                  <th scope="col">
+                    <h6>Fecha inicio</h6>
+                  </th>
+                  <th scope="col">
+                    <h6>Fecha fin</h6>
+                  </th>
+                  <th scope="col">
+                    <h6>Solicitud</h6>
+                  </th>
+                  <th scope="col">
+                    <h6>Borrar</h6>
+                  </th>
+
+                </tr>
+            </thead>
+            <tbody>
+              {% for parte in partes %}
+              <tr>
+                <th scope="row">
+                  <h5><a href="{{path('editarParte',{'id':parte.id})}}"><i class="fas fa-edit"></i>
+                    </a></h5>
+                </th>
+                <th scope="row">
+                  <h5><a href="{{path('parte',{'id':parte.id})}}">
+                      <h6>{{parte.id}}</h6>
+                    </a></h5>
+                </th>
+
+                <td>
+                  <h6>{{parte.localizacion}}</h6>
+                </td>
+                <td>
+                  <h6>{{parte.trabajador}}</h6>
+                </td>
+                <td>
+                  <h6>{{parte.fechainicio|date('Y/m/d h:i')}}</h6>
+                </td>
+                <td>
+                  <h6>{{parte.fechafin|date('Y/m/d h:i')}}</h6>
+                </td>
+                <td>
+                  <h6>{{parte.solicitud.id}}</h6>
+                </td>
+                <th scope="row">
+                  <h5><a href="#" onclick="return controlBorrado('{{path('borrarParte',{'id':parte.id})}}','{{parte.id}}');"><i class="fas fa-trash-alt"></i>
+                    </a></h5>
+                </th>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="col-md-2">
+</div>
+
+<div style="margin-bottom:200px"></div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script src="{{asset('js/sweetalert.min.js')}}"></script>
+<script src="{{asset('js/controlBorrado.js')}}"></script>
+
+{% endblock %}

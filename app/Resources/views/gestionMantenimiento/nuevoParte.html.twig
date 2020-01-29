@@ -1,0 +1,42 @@
+{# Plantilla de nuestra aplicación#}
+{%extends 'frontal/base1.html.twig'%}
+{% form_theme form 'form/baseForm.html.twig' %}
+
+{#TITULO#}
+{% block titulo %} Parte de trabajo{% endblock %}
+{#Contenido#}
+{% block contenido %}
+<!-- Page Content -->
+
+<div class="container">
+
+  <!-- Page Heading/Breadcrumbs -->
+  <div style="margin-top:75px">
+    <h1 class=" mt-4 mb-3"> Mantenimiento
+      <small>Parte de trabajo</small>
+    </h1>
+  </div>
+
+
+  <!-- Intro Content -->
+  <div style="margin-bottom:75px">
+    <div class="row">
+
+
+      <div class="col-lg-6">
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+      </div>
+      <div class="col-lg-6">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- /.row -->
+
+
+{% endblock %}

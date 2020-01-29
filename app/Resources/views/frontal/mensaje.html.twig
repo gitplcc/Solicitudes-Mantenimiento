@@ -1,0 +1,35 @@
+{# Plantilla de nuestra aplicación#}
+{%extends 'frontal/base1.html.twig'%}
+
+{#TITULO#}
+{% block titulo %}Solicitud Mantenimiento{% endblock %}
+{#Contenido#}
+{% block contenido %}
+<!-- Page Content -->
+
+<div class="container">
+
+  <!-- Page Heading/Breadcrumbs -->
+  <div style="margin-top:75px">
+    <h1 class=" mt-4 mb-3">Solicitud Mantenimiento
+
+    </h1>
+  </div>
+
+
+  <!-- Intro Content -->
+  <div style="margin-bottom:75px">
+    <h4>Su solicitud ha sido registrada. Le iremos informando sobre el progreso de los trabajos para solventar la incidencia.
+    </h4>
+    <a class="btn btn-primary" style="background-color:#C3C3C3;border: #000;background: -moz-linear-gradient(center top , #C0C0C0 0%, #808080 100%) repeat scroll 0 0 transparent;background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #C0C0C0), color-stop(100%,#808080));
+        box-shadow: 1px 1px 1px grey" href="{{ path('nuevaSolicitud') }}" role="button">Nueva Solicitud</a>
+
+
+
+  </div>
+</div>
+
+<!-- /.row -->
+
+
+{% endblock %}

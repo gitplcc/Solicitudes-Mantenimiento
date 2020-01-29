@@ -1,0 +1,75 @@
+{# Plantilla de nuestra aplicación#}
+{%extends 'frontal/base1.html.twig'%}
+{#TITULO#}
+{% block titulo %}
+Solicitud
+{% endblock %}
+
+{#Contenido#}
+{% block contenido %}
+<!-- Page Content -->
+<div class="container">
+  <div style="margin-top:75px">
+
+    <!-- Page Heading/Breadcrumbs -->
+
+    <!-- Portfolio Item Row -->
+    <div id="content">
+      <div class="row">
+
+        <div class="col-lg-20">
+          <h1 class="mt-4 mb-3">Solicitud {{solicitud.id}} </h1>
+          <h3 class="my-3">Solicitante: <small> {{solicitud.solicitante}}</small></h3>
+          <h3 class="my-3">Unidad de destino: <small> {{solicitud.destino}}</small></h3>
+          <h3 class="my-3">Fecha: <small>{{solicitud.fecha|date('Y/m/d')}}</small></h3>
+          <h3 class="my-3">Extensión: <small>{{solicitud.extension}}</small></h3>
+          <h3 class="my-3">Email: <small>{{solicitud.email}}</small></h3>
+          <h3 class="my-3">Descripción Incidencia: <small>{{solicitud.descripcionIncidencia}}</small></h3>
+          {% if solicitud.pendiente %}
+          <h3 class="my-3">Pendiente: <small>Sí</small></h3>
+          {% else %}
+          <h3 class="my-3">Pendiente: <small>No</small></h3>
+          {% endif %}
+
+
+
+
+        </div>
+        <!-- /.row -->
+
+      </div>
+    </div>
+    <div id="editor"></div>
+
+    <button id="cmd">Generar PDF</button>
+
+
+  </div>
+  <div style="margin-bottom:75px">
+  </div>
+
+
+</div>
+
+{% endblock %}
+{% block javascripts %}
+
+<script>
+  var doc = new jsPDF();
+  var specialElementHandlers = {
+    '#editor': function(element, renderer) {
+      return true;
+    }
+  };
+
+  $('#cmd').click(function() {
+    doc.fromHTML($('#content').html(), 15, 15, {
+      'width': 170,
+      'elementHandlers': specialElementHandlers
+    });
+    doc.save('Solicitud.pdf');
+  });
+
+  // This code is collected but useful, click below to jsfiddle link.
+</script>
+{% endblock %}
