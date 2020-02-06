@@ -59,6 +59,13 @@ class Solicitud
     /**
      * @var string
      *
+     * @ORM\Column(name="trabajador", type="string",  nullable=true, length=255)
+     */
+    private $trabajador;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="estancia", type="string", length=255)
      */
     private $estancia;
@@ -71,11 +78,11 @@ class Solicitud
     private $descripcionIncidencia;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="Pendiente", type="boolean")
+     * @ORM\Column(name="estado", type="integer")
      */
-    private $pendiente;
+    private $estado;
 
     /**
      * Get id
@@ -109,6 +116,30 @@ class Solicitud
     public function getSolicitante()
     {
         return $this->solicitante;
+    }
+
+    /**
+     * Set trabajador
+     *
+     * @param string $trabajador
+     *
+     * @return Solicitud
+     */
+    public function setTrabajador($trabajador)
+    {
+        $this->trabajador = $trabajador;
+
+        return $this;
+    }
+
+    /**
+     * Get trabajador
+     *
+     * @return string
+     */
+    public function getTrabajador()
+    {
+        return $this->trabajador;
     }
 
     /**
@@ -256,26 +287,26 @@ class Solicitud
     }
 
     /**
-     * Set pendiente
+     * Set estado
      *
-     * @param boolean $pendiente
+     * @param integer $estado
      *
      * @return Solicitud
      */
-    public function setPendiente($pendiente)
+    public function setEstado($estado)
     {
-        $this->pendiente = $pendiente;
+        $this->estado = $estado;
 
         return $this;
     }
 
     /**
-     * Get pendiente
+     * Get estado
      *
-     * @return boolean
+     * @return integer
      */
-    public function getPendiente()
+    public function getEstado()
     {
-        return $this->pendiente;
+        return $this->estado;
     }
 }

@@ -3,7 +3,7 @@
 {% form_theme form 'form/baseForm.html.twig' %}
 
 {#TITULO#}
-{% block titulo %} Parte de trabajo{% endblock %}
+{% block titulo %} Parte de trabajo {% endblock %}
 {#Contenido#}
 {% block contenido %}
 <!-- Page Content -->
@@ -13,7 +13,13 @@
   <!-- Page Heading/Breadcrumbs -->
   <div style="margin-top:75px">
     <h1 class=" mt-4 mb-3"> Mantenimiento
-      <small>Parte de trabajo</small>
+
+      {% if parte.id %}
+      <small>Parte de trabajo <a href="{{path('parte',{'id':parte.id})}}">{{parte.id}}</a></small>
+      {% else %}
+      <small>Parte de trabajo para la solicitud <a href="{{path('solicitud',{'id':solicitud.id})}}">{{solicitud.id}}</a></small>
+
+      {% endif %}
     </h1>
   </div>
 

@@ -25,29 +25,35 @@ Solicitud
           <h3 class="my-3">Extensión: <small>{{solicitud.extension}}</small></h3>
           <h3 class="my-3">Email: <small>{{solicitud.email}}</small></h3>
           <h3 class="my-3">Descripción Incidencia: <small>{{solicitud.descripcionIncidencia}}</small></h3>
-          {% if solicitud.pendiente %}
-          <h3 class="my-3">Pendiente: <small>Sí</small></h3>
+          <h3 class="my-3">Lugar Incidencia: <small>{{solicitud.estancia}}</small></h3>
+          {% if solicitud.trabajador %}
+          <h3 class="my-3">Solicitud asignada a: <small>{{solicitud.trabajador}}</small></h3>
           {% else %}
-          <h3 class="my-3">Pendiente: <small>No</small></h3>
+          <h3 class="my-3">Solicitud pendiente de ser asignada</h3>
           {% endif %}
-
-
-
+          {% if solicitud.estado==2 %}
+          <h3 class="my-3"> Solicitud despachada</h3>
+          {% endif %}
 
         </div>
         <!-- /.row -->
 
       </div>
     </div>
-    <div id="editor"></div>
 
-    <button id="cmd">Generar PDF</button>
+    <div class="row">
+      <div class="col-lg-20">
+        <button id="cmd">Generar PDF</button>
+      </div>
+      <div class="col-lg-20">
+      </div>
 
+
+      <div style="margin-bottom:75px">
+      </div>
+    </div>
 
   </div>
-  <div style="margin-bottom:75px">
-  </div>
-
 
 </div>
 

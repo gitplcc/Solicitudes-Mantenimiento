@@ -75,7 +75,7 @@ class DefaultController extends Controller
       //Recogemos la información de un submit
       $form->handleRequest($request);
       if ($form->isSubmitted() && $form->isValid()) {
-          $solicitud->setPendiente(array('true'));
+          $solicitud->setEstado('0');
           //Almacenar nueva Solicitud
           $em = $this->getDoctrine()->getManager();
           $em->persist($solicitud);

@@ -11,6 +11,7 @@ use AppBundle\Entity\Usuario;
 use AppBundle\Entity\Parte;
 use AppBundle\Form\ParteType;
 use AppBundle\Form\SolicitudType;
+use AppBundle\Form\SolicitudTrabajadorType;
 use AppBundle\Form\UsuarioType;
 use AppBundle\Form\FechaType;
 use AppBundle\Form\TaskType;
@@ -66,12 +67,14 @@ class GestionController extends Controller
             $parte = new Parte();
             $form = $this->createForm(ParteType::class, $parte);
             $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-            $parte = $form->getData();
             $solicitud = new Solicitud();
             $solicitudRepository = $this->getDoctrine()->getRepository(Solicitud::class);
             $solicitud = $solicitudRepository->find($id);
-            $solicitud->setPendiente('0');
+            if ($form->isSubmitted() && $form->isValid()) {
+            $parte = $form->getData();
+            $trabajador = $parte->getTrabajador();
+            $solicitud->setEstado('2');//estado 2: solicitud despachada
+            $solicitud->setTrabajador($trabajador);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($solicitud);
@@ -84,41 +87,64 @@ class GestionController extends Controller
             return $this->redirectToRoute('partes');
 
        }
-        return $this->render('gestionMantenimiento/nuevoParte.html.twig',array("form" => $form->createView()));
+        return $this->render('gestionMantenimiento/nuevoParte.html.twig',array("form" => $form->createView(),"solicitud"=>$solicitud,"parte"=>$parte));
         }
 
         /**
          * @Route("/editarParte/{id}", name="editarParte")
          */
-         public function editrParteAction(Request $request,$id)
+         public function editarParteAction(Request $request,$id)
          {
-
+            $solicitud = new Solicitud();
             $partesRepository = $this->getDoctrine()->getRepository(Parte::class);
             $parte=$partesRepository->find($id);
-
+            $solicitud = $parte->getSolicitud();
             $form = $this->createForm(ParteType::class, $parte);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
               //Almacenar nuevo Parte
-
+            $trabajador = $parte->getTrabajador();
+            $solicitud->setTrabajador($trabajador);
             $em = $this->getDoctrine()->getManager();
             $em->persist($parte);
             $em->flush();
             return $this->redirectToRoute('partes');
          }
-            return $this->render('gestionMantenimiento/nuevoParte.html.twig',array("form" => $form->createView()));
+            return $this->render('gestionMantenimiento/nuevoParte.html.twig',array("form" => $form->createView(),"parte"=>$parte));
 
           }
 
     /**
-     * @Route("/pendientes", name="pendientes")
+     * @Route("/asignadas", name="asignadas")
      */
-    public function pendientesAction(Request $request)
+    public function asignadasAction(Request $request)
     {
        $repository = $this->getDoctrine()->getRepository(Solicitud::class);
-       $solicitudes = $repository->findByPendiente('1');
+       $solicitudes = $repository->findByEstado('1');
        return $this->render('gestionMantenimiento/pendientes.html.twig',array("solicitudes" => $solicitudes));
       }
+
+      /**
+       * @Route("/pendientesDeAsignar", name="pendientesDeAsignar")
+       */
+      public function pendientesDeAsignarAction(Request $request)
+      {
+         $repository = $this->getDoctrine()->getRepository(Solicitud::class);
+         $solicitudes = $repository->findByEstado('0');
+         return $this->render('gestionMantenimiento/pendientes.html.twig',array("solicitudes" => $solicitudes));
+        }
+
+        /**
+         * @Route("/despachadas", name="despachadas")
+         */
+        public function despachadasAction(Request $request)
+        {
+           $repository = $this->getDoctrine()->getRepository(Solicitud::class);
+           $solicitudes = $repository->findByEstado('2');
+           return $this->render('gestionMantenimiento/pendientes.html.twig',array("solicitudes" => $solicitudes));
+          }
+
+
 
     /**
      * @Route("/solicitudes", name="solicitudes")
@@ -191,6 +217,7 @@ class GestionController extends Controller
           }
           }
 
+
           /**
          * @Route("/solicitud/{id}", name="solicitud")
          */
@@ -207,6 +234,55 @@ class GestionController extends Controller
           }
           }
 
+
+          /**
+         * @Route("/asignarSolicitud/{id}", name="asignarSolicitud")
+         */
+        public function asignarSolicitudAction(Request $request,$id=null)
+        {
+
+            $solicitudesRepository = $this->getDoctrine()->getRepository(Solicitud::class);
+            $solicitud = $solicitudesRepository->find($id);
+
+            $form = $this->createForm(SolicitudTrabajadorType::class, $solicitud);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+            //Almacenar nuevo trabajador en la solicitud
+              $solicitud->setEstado('1');//estado 2: solicitud despachada
+
+              $em = $this->getDoctrine()->getManager();
+              $em->persist($solicitud);
+              $em->flush();
+              return $this->redirectToRoute('solicitudes');
+          }
+            return $this->render('gestionMantenimiento/asignarSolicitud.html.twig',array("form" => $form->createView(),"solicitud" => $solicitud));
+
+        }
+
+        /**
+         * @Route("/editarAsignacion/{id}", name="editarAsignacion")
+         */
+         public function editarAsignacionAction(Request $request,$id)
+         {
+
+            $solicitudesRepository = $this->getDoctrine()->getRepository(Solicitud::class);
+            $solicitud = $solicitudesRepository->find($id);
+
+            $form = $this->createForm(SolicitudTrabajadorType::class, $solicitud);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+              //Almacenar nuevo Trabajador
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($solicitud);
+            $em->flush();
+            return $this->redirectToRoute('solicitudes');
+         }
+            return $this->render('gestionMantenimiento/asignarSolicitud.html.twig',array("form" => $form->createView(),"solicitud"=>$solicitud));
+
+          }
+
+
       /**
      * @Route("/borrar/{id}", name="borrarParte")
      */
@@ -222,14 +298,16 @@ class GestionController extends Controller
         $solicitudId = $solicitud->getId();
         $solicitudRepository = $this->getDoctrine()->getRepository(Solicitud::class);
         $solicitud = $solicitudRepository->find($solicitudId);
-        $solicitud->setPendiente('1');
+        $solicitud->setEstado('1');
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($solicitud);
+        $em->flush();
         //Borrado
         $em = $this->getDoctrine()->getManager();
         $em->remove($parte);
         $em->flush();
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($solicitud);
-        $em->flush();
+
+
 
       }
       return $this->redirectToRoute('partes');

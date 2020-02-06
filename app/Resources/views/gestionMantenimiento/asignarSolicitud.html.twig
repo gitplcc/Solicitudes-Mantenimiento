@@ -3,7 +3,7 @@
 {% form_theme form 'form/baseForm.html.twig' %}
 
 {#TITULO#}
-{% block titulo %}Solicitud Mantenimiento{% endblock %}
+{% block titulo %} Parte de trabajo{% endblock %}
 {#Contenido#}
 {% block contenido %}
 <!-- Page Content -->
@@ -12,8 +12,8 @@
 
   <!-- Page Heading/Breadcrumbs -->
   <div style="margin-top:75px">
-    <h1 class=" mt-4 mb-3">Solicitud Mantenimiento
-
+    <h1 class=" mt-4 mb-3"> Mantenimiento
+      <small>Asignar la solicitud <a href="{{path('solicitud',{'id':solicitud.id})}}">{{solicitud.id}}</a> a un trabajador</small>
     </h1>
   </div>
 
@@ -28,12 +28,9 @@
         {{ form_start(form) }}
         {{ form_widget(form) }}
         {{ form_end(form) }}
-
       </div>
-    </div>
-    <div style="margin-top:10px">
-      <a class="btn btn-primary" style="background-color:#C3C3C3;border: #000;background: -moz-linear-gradient(center top , #C0C0C0 0%, #808080 100%) repeat scroll 0 0 transparent;background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #C0C0C0), color-stop(100%,#808080));
-            box-shadow: 1px 1px 1px grey" href="{{ path('nuevaSolicitud') }}" role="button"> Limpiar </a>
+      <div class="col-lg-6">
+      </div>
     </div>
 
   </div>
