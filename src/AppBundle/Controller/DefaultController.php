@@ -66,7 +66,7 @@ class DefaultController extends Controller
   /**
    * @Route("/nuevaSolicitud", name="nuevaSolicitud")
    */
-   public function nuevaSolicitudAction(Request $request)
+   public function nuevaSolicitudAction(Request $request, \Swift_Mailer $mailer)
    {
      $solicitud = new Solicitud();//Crea un Entity Usuario llamado solicitud
       //Construyendo el formulario
@@ -80,9 +80,16 @@ class DefaultController extends Controller
           $em = $this->getDoctrine()->getManager();
           $em->persist($solicitud);
           $em->flush();
+          $message = (new \Swift_Message('Nueva Solicitud para el servicio de Mantenimiento ETSIDI'))
+            ->setFrom('mariabelen.sanz@upm.es')
+            ->setTo('mariabelen.sanz@upm.es')
+            ->setBody(
+                 $this->renderView('Emails/NotificacionSolicitud.html.twig', ['solicitud'=>$solicitud]),'text/html')
+            ;
+          $mailer->send($message);
           return $this->redirectToRoute('mensaje');
           }
-      return $this->render('frontal/index.html.twig',array("form" => $form->createView()));
+      return $this->render('frontal/nuevaSolicitud.html.twig',array("form" => $form->createView()));
      }
 
   /**
