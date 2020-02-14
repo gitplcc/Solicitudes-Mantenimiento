@@ -1,0 +1,38 @@
+{# Plantilla de nuestra aplicación#}
+{#Contenido#}
+{% block contenido %}
+<!-- Page Content -->
+<div class="container">
+  <div style="margin-top:10px">
+
+    <!-- Page Heading/Breadcrumbs -->
+
+    <!-- Portfolio Item Row -->
+    <div id="content">
+      <div class="row">
+        <div class="col-lg-20">
+          <h2 class="mt-4 mb-3">Desde la Subdirección de asuntos económicos y planificación de la ETSIDI le invitamos a valorar los trabajos realizados para solventar la incidencia notificada por {{parte.solicitud.solicitante}}: </h2>
+          <h2 class="mt-4 mb-3">Parte de Trabajo {{parte.id}} </h2>
+
+          <h3 class="my-3">localización: <small> {{parte.localizacion}}</small></h3>
+
+          <h3 class="my-3">Fecha de inicio: <small>{{parte.fechainicio|date('Y/m/d')}}</small></h3>
+          <h3 class="my-3">Fecha de finalización: <small>{{parte.fechafin|date('Y/m/d')}}</small></h3>
+          <h3 class="my-3">intervención realizada por: <small>{{parte.trabajador}}</small></h3>
+          <h3 class="my-3">Trabajos realizados: <small>{{parte.descripcion}}</small></h3>
+          <h3 class="my-3">Solicitud que genera el parte: <small>{{parte.solicitud.id}}</small></h3>
+
+
+        </div>
+        <h3 class="my-3">Si desea realizar la valoración puede hacerlo en el siguiente enlace: http://138.100.103.60:8000/rellenarSatisfaccion/{{parte.id}}</h3>
+
+
+        <!-- /.row -->
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

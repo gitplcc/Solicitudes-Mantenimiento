@@ -39,6 +39,9 @@
                   <th scope="col">
                     <h6>Solicitud</h6>
                   </th>
+                  <th scope="col">
+                    <h6>Borrar</h6>
+                  </th>
 
                 </tr>
             </thead>
@@ -70,7 +73,10 @@
                 <td>
                   <h6>{{parte.solicitud.id}}</h6>
                 </td>
-
+                <th scope="row">
+                  <h5><a href="#" onclick="return controlBorrado('{{path('borrarParte',{'id':parte.id})}}','{{parte.id}}');"><i class="fas fa-trash-alt"></i>
+                    </a></h5>
+                </th>
               </tr>
               {% endfor %}
             </tbody>

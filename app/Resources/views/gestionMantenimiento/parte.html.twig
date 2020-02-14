@@ -1,5 +1,5 @@
 {# Plantilla de nuestra aplicación#}
-{%extends 'frontal/base1.html.twig'%}
+{%extends 'frontal/base2.html.twig'%}
 {#TITULO#}
 {% block titulo %}
 Parte
@@ -27,6 +27,9 @@ Parte
           <h3 class="my-3">intervención realizada por: <small>{{parte.trabajador}}</small></h3>
           <h3 class="my-3">Trabajos realizados: <small>{{parte.descripcion}}</small></h3>
           <h3 class="my-3">Solicitud que genera el parte: <small>{{parte.solicitud.id}}</small></h3>
+          <h3 class="my-3">Solicitante de la intervención: <small>{{parte.solicitud.solicitante}}</small></h3>
+          <h3 class="my-3">Grado de satisfacción por parte del solicitante (0 a 10): <small>{{parte.satisfaccion}}</small></h3>
+          <h3 class="my-3">Observaciones del solicitante: <small>{{parte.observaciones}}</small></h3>
 
 
 
@@ -35,7 +38,7 @@ Parte
 
       </div>
     </div>
-    <div id="editor"></div>
+    <div id="editor" style="margin-top:20px"></div>
 
     <button id="cmd">Generar PDF</button>
 

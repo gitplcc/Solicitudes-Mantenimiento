@@ -9,8 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Solicitud;
 use AppBundle\Entity\Usuario;
+use AppBundle\Entity\Parte;
 use AppBundle\Form\SolicitudType;
 use AppBundle\Form\UsuarioType;
+use AppBundle\Form\RespuestaType;
+
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -92,13 +95,24 @@ class DefaultController extends Controller
       return $this->render('frontal/nuevaSolicitud.html.twig',array("form" => $form->createView()));
      }
 
+
   /**
-   * @Route("/mensaje", name="mensaje")
+   * @Route("/mensajeNoPuede", name="mensajeNoPuede")
    */
-   public function mensajeAction(Request $request)
+   public function mensajeNoPuedeAction(Request $request)
    {
-     return $this->render('frontal/mensaje.html.twig');
+     return $this->render('frontal/mensajeNoPuede.html.twig');
      }
+
+
+   /**
+    * @Route("/mensaje", name="mensaje")
+    */
+    public function mensajeAction(Request $request)
+    {
+      return $this->render('frontal/mensaje.html.twig');
+      }
+
 
   /**
   * @Route("/login", name="login")
@@ -114,5 +128,38 @@ class DefaultController extends Controller
               'error'         => $error,
              ));
          }
+
+     /**
+      * @Route("/rellenarSatisfaccion/{id}", name="rellenarSatisfaccion")
+      */
+      public function rellenarSatisfaccionAction(Request $request, $id)
+      {
+         $parte = new Parte();
+         $partesRepository = $this->getDoctrine()->getRepository(Parte::class);
+         $parte=$partesRepository->find($id);
+         $completado = $parte->getCompletado();
+         if($completado==0){
+             $form = $this->createForm(RespuestaType::class, $parte);
+             $form->handleRequest($request);
+             if ($form->isSubmitted() && $form->isValid()) {
+             //Almacenar nuevo Parte
+             $satisfaccion = $parte->getSatisfaccion();
+             $observaciones = $parte->getObservaciones();
+
+             $parte->setSatisfaccion($satisfaccion);
+             $parte->setObservaciones($observaciones);
+             $parte->setCompletado(1);
+
+
+             $em = $this->getDoctrine()->getManager();
+             $em->persist($parte);
+             $em->flush();
+             return $this->redirectToRoute('nuevaSolicitud');
+       }
+     }else{return $this->redirectToRoute('mensajeNoPuede');
+      }
+         return $this->render('frontal/rellenarSatisfaccion.html.twig',array("form" => $form->createView(),"parte"=>$parte));
+
+       }
 
 }

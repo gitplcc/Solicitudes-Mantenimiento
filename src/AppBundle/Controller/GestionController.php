@@ -61,7 +61,7 @@ class GestionController extends Controller
       /**
        * @Route("/nuevoParte/{id}", name="nuevoParte")
        */
-       public function nuevoParteAction(Request $request,$id)
+       public function nuevoParteAction(Request $request,$id, \Swift_Mailer $mailer)
        {
 
             $parte = new Parte();
@@ -84,6 +84,13 @@ class GestionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($parte);
             $em->flush();
+            $message = (new \Swift_Message('Grado de satisfacción con el servicio recibido'))
+              ->setFrom('mariabelen.sanz@upm.es')
+              ->setTo('mariabelen.sanz@upm.es')
+              ->setBody(
+                   $this->renderView('Emails/NotificacionParte.html.twig', ['parte'=>$parte]),'text/html')
+              ;
+            $mailer->send($message);
             return $this->redirectToRoute('partes');
 
        }
@@ -113,6 +120,29 @@ class GestionController extends Controller
             return $this->render('gestionMantenimiento/nuevoParte.html.twig',array("form" => $form->createView(),"parte"=>$parte));
 
           }
+
+          /**
+           * @Route("/solicitudMan", name="solicitudMan")
+           */
+           public function nuevaSolicitudAction(Request $request, \Swift_Mailer $mailer)
+           {
+             $solicitud = new Solicitud();//Crea un Entity Usuario llamado solicitud
+              //Construyendo el formulario
+             $form = $this->createForm(SolicitudType::class, $solicitud);
+
+              //Recogemos la información de un submit
+              $form->handleRequest($request);
+              if ($form->isSubmitted() && $form->isValid()) {
+                  $solicitud->setEstado('0');
+                  //Almacenar nueva Solicitud
+                  $em = $this->getDoctrine()->getManager();
+                  $em->persist($solicitud);
+                  $em->flush();
+                  return $this->redirectToRoute('solicitudes');
+
+                  }
+              return $this->render('gestionMantenimiento/nuevaSolicitudMan.html.twig',array("form" => $form->createView()));
+             }
 
     /**
      * @Route("/asignadas", name="asignadas")

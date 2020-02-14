@@ -62,6 +62,27 @@ class Parte
      */
      private $solicitud;
 
+     /**
+      * @var int
+      *
+      * @ORM\Column(name="satisfaccion", type="integer",  nullable=true)
+      */
+     private $satisfaccion;
+
+     /**
+      * @var string
+      *
+      * @ORM\Column(name="observaciones", type="text",  nullable=true)
+      */
+     private $observaciones;
+
+     /**
+      * @var int
+      *
+      * @ORM\Column(name="completado", type="integer",  nullable=true)
+      */
+     private $completado;
+
     /**
      * Get id
      *
@@ -214,5 +235,77 @@ class Parte
   public function getSolicitud()
   {
       return $this->solicitud;
+    }
+
+    /**
+     * Get satisfaccion
+     *
+     * @return int
+     */
+    public function getSatisfaccion()
+    {
+        return $this->satisfaccion;
+    }
+
+    /**
+     * Set satisfaccion
+     *
+     * @param integer $satisfaccion
+     *
+     * @return Parte
+     */
+    public function setSatisfaccion($satisfaccion)
+    {
+        $this->satisfaccion = $satisfaccion;
+
+        return $this;
+    }
+
+    /**
+     * Set observaciones
+     *
+     * @param string $observaciones
+     *
+     * @return Parte
+     */
+    public function setobservaciones($observaciones)
+    {
+        $this->observaciones = $observaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get observaciones
+     *
+     * @return string
+     */
+    public function getObservaciones()
+    {
+        return $this->observaciones;
+    }
+
+    /**
+     * Get completado
+     *
+     * @return int
+     */
+    public function getCompletado()
+    {
+        return $this->completado;
+    }
+
+    /**
+     * Set completado
+     *
+     * @param integer $completado
+     *
+     * @return Parte
+     */
+    public function setCompletado($completado)
+    {
+        $this->completado = $completado;
+
+        return $this;
     }
 }
